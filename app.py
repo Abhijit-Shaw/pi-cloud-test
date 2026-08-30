@@ -1,13 +1,28 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
+import time
 
 app = Flask(__name__)
 
 # Temporary memory for testing
 data_history = []
+last_received_time = 0
+
 
 @app.route("/")
 def dashboard():
+    global last_received_time
+
+    # Check whether data was received in the last 5 seconds
+    current_time = time.time()
+
+    if last_received_time != 0 and (current_time - last_received_time) <= 5:
+        system_status = "● SYSTEM ONLINE"
+        status_class = "online"
+    else:
+        system_status = "● SYSTEM OFFLINE"
+        status_class = "offline"
+
     rows = ""
 
     for data in reversed(data_history):
@@ -16,19 +31,32 @@ def dashboard():
             <td>{data.get("timestamp", "")}</td>
             <td>{data.get("device", "")}</td>
             <td>{data.get("temperature_C", "")} °C</td>
-            <td><span class="status">{data.get("status", "")}</span></td>
+            <td>
+                <span class="data-status">
+                    {data.get("status", "")}
+                </span>
+            </td>
+        </tr>
+        """
+
+    if not rows:
+        rows = """
+        <tr>
+            <td colspan="4">No data received yet</td>
         </tr>
         """
 
     return f"""
     <!DOCTYPE html>
     <html>
+
     <head>
-        <title>Industrial Data Dashboard</title>
+        <title>Industrial Data Monitoring</title>
 
         <meta http-equiv="refresh" content="1">
 
         <style>
+
             body {{
                 margin: 0;
                 font-family: Arial, sans-serif;
@@ -39,7 +67,7 @@ def dashboard():
             .header {{
                 background: #1f2937;
                 color: white;
-                padding: 20px;
+                padding: 25px;
                 text-align: center;
             }}
 
@@ -48,10 +76,18 @@ def dashboard():
                 font-size: 28px;
             }}
 
+            .system-status {{
+                margin-top: 10px;
+                font-size: 15px;
+                font-weight: bold;
+            }}
+
             .online {{
-                margin-top: 8px;
                 color: #4ade80;
-                font-size: 14px;
+            }}
+
+            .offline {{
+                color: #f87171;
             }}
 
             .container {{
@@ -95,7 +131,7 @@ def dashboard():
                 background: #f5f5f5;
             }}
 
-            .status {{
+            .data-status {{
                 background: #dcfce7;
                 color: #166534;
                 padding: 5px 12px;
@@ -108,15 +144,23 @@ def dashboard():
                 margin-top: 15px;
                 color: #666;
             }}
+
         </style>
+
     </head>
 
     <body>
 
         <div class="header">
+
             <h1>Industrial Data Monitoring</h1>
-            <div class="online">● SYSTEM ONLINE</div>
+
+            <div class="system-status {status_class}">
+                {system_status}
+            </div>
+
         </div>
+
 
         <div class="container">
 
@@ -125,6 +169,7 @@ def dashboard():
                 <h2>Live Data</h2>
 
                 <table>
+
                     <tr>
                         <th>Time</th>
                         <th>Device</th>
@@ -145,6 +190,7 @@ def dashboard():
         </div>
 
     </body>
+
     </html>
     """
 
@@ -152,13 +198,20 @@ def dashboard():
 @app.route("/data", methods=["POST"])
 def receive_data():
 
+    global last_received_time
+
     data = request.get_json()
 
+    # Add current time
     data["timestamp"] = datetime.now().strftime("%H:%M:%S")
 
+    # Store data
     data_history.append(data)
 
-    # Keep maximum 500 readings for this test
+    # Record the time of the latest data
+    last_received_time = time.time()
+
+    # Keep maximum 500 readings
     if len(data_history) > 500:
         data_history.pop(0)
 
