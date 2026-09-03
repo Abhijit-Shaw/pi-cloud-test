@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import time
 
 app = Flask(__name__)
@@ -203,7 +204,9 @@ def receive_data():
     data = request.get_json()
 
     # Add current time
-    data["timestamp"] = datetime.now().strftime("%H:%M:%S")
+    data["timestamp"] = datetime.now(
+    ZoneInfo("Asia/Kolkata")
+).strftime("%H:%M:%S")
 
     # Store data
     data_history.append(data)
