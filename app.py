@@ -25,34 +25,17 @@ OFFLINE_AFTER_S = 60
 
 # Per-sensor display config: label, location and alarm limits.
 # Sensors not listed appear automatically with defaults.
+# Fixed list of 10 freezers.
+# These 10 always appear on the dashboard.
+# Only freezers that actually send telemetry show a temperature.
 SENSOR_CFG = {
-    "FRZ-01-T1": {
-        "name": "Freezer 1 - Air",
+    f"PLC{i:03d}": {
+        "name": f"Freezer {i}",
         "location": "Plant room A",
         "low": -25.0,
         "high": -15.0
-    },
-
-    "FRZ-02-T1": {
-        "name": "Freezer 2 - Air",
-        "location": "Plant room A",
-        "low": -25.0,
-        "high": -15.0
-    },
-
-    "PLC001": {
-        "name": "Freezer 1 - Air",
-        "location": "Plant room A",
-        "low": -25.0,
-        "high": -15.0
-    },
-
-    "PLC002": {
-        "name": "Freezer 2 - Air",
-        "location": "Plant room A",
-        "low": -25.0,
-        "high": -15.0
-    },
+    }
+    for i in range(1, 11)
 }
 DEFAULT_CFG = {"name": "Sensor", "location": "Site", "low": -25.0, "high": -15.0}
 
