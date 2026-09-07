@@ -41,7 +41,7 @@ SENSOR_CFG = {
         "name": f"Freezer {i}",
         "location": "Plant room A",
         "low": -25.0,
-        "high": -15.0
+        "high": -10.0
     }
     for i in range(1, 11)
 }
@@ -50,7 +50,7 @@ DEFAULT_CFG = {
     "name": "Sensor",
     "location": "Site",
     "low": -25.0,
-    "high": -15.0
+    "high": -10.0
 }
 
 
