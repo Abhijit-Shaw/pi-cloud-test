@@ -359,7 +359,7 @@ async function poll(){
     document.getElementById('updated').textContent=
       'updated '+new Date().toLocaleTimeString();
   }catch(e){ console.log(e); }
-  setTimeout(poll,5000);
+  setTimeout(poll,1000);
 }
 poll();
 </script>
