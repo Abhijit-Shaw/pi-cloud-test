@@ -26,12 +26,33 @@ OFFLINE_AFTER_S = 60
 # Per-sensor display config: label, location and alarm limits.
 # Sensors not listed appear automatically with defaults.
 SENSOR_CFG = {
-    "FRZ-01-T1": {"name": "Freezer 1 - Air",  "location": "Plant room A",
-                  "low": -25.0, "high": -15.0},
-    "FRZ-02-T1": {"name": "Freezer 2 - Air",  "location": "Plant room A",
-                  "low": -25.0, "high": -15.0},
-    "PLC001":    {"name": "Freezer 1 - Air",  "location": "Plant room A",
-                  "low": -25.0, "high": -15.0},
+    "FRZ-01-T1": {
+        "name": "Freezer 1 - Air",
+        "location": "Plant room A",
+        "low": -25.0,
+        "high": -15.0
+    },
+
+    "FRZ-02-T1": {
+        "name": "Freezer 2 - Air",
+        "location": "Plant room A",
+        "low": -25.0,
+        "high": -15.0
+    },
+
+    "PLC001": {
+        "name": "Freezer 1 - Air",
+        "location": "Plant room A",
+        "low": -25.0,
+        "high": -15.0
+    },
+
+    "PLC002": {
+        "name": "Freezer 2 - Air",
+        "location": "Plant room A",
+        "low": -25.0,
+        "high": -15.0
+    },
 }
 DEFAULT_CFG = {"name": "Sensor", "location": "Site", "low": -25.0, "high": -15.0}
 
