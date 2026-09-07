@@ -354,18 +354,22 @@ function renderGraphs(){
   const ids=[...selected].filter(id=>lastData.sensors[id]);
   const graphs=document.getElementById('graphs');
 
-  // Keep chart objects only for selected sensors.
+  // Rebuild the graph cards and charts together.
+  // The old version recreated the canvas every second but kept the old
+  // Chart.js object, so Chart.js continued updating a canvas that was no
+  // longer in the page. That made the graph area appear blank.
   Object.keys(charts).forEach(id=>{
-    if(!selected.has(id)){
+    try{
       charts[id].destroy();
-      delete charts[id];
-    }
+    }catch(e){}
+    delete charts[id];
   });
 
   graphs.innerHTML=ids.map(id=>makeGraphCard(id,lastData.sensors[id])).join('') ||
     '<span class="muted">Select at least 2 freezers to display their graphs.</span>';
 
   ids.forEach(drawChart);
+
   document.getElementById('selectinfo').textContent =
     `${ids.length} selected · ${ids.length < 2 ? 'select at least 2' : 'graphs shown'}`;
 }
